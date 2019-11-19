@@ -1,10 +1,10 @@
 /// <reference types="@types/markerclustererplus" />
-import {} from "google-maps";
-import * as styledMap from "./styledMap";
-import * as myCustomStyle from "./myCustomStyle";
-import { listenForDrawing } from "./drawing";
-import { placesSearch } from "./placesSearch";
-import { directionCalculator } from "./directions";
+import {} from 'google-maps'
+import * as styledMap from './styledMap'
+import * as myCustomStyle from './myCustomStyle'
+import { listenForDrawing } from './drawing'
+import { placesSearch } from './placesSearch'
+import { directionCalculator } from './directions'
 
 import { customGradient } from './gradient'
 import { mapNumber } from './mapNumber'
@@ -39,9 +39,9 @@ export function FunWithMaps(map: google.maps.Map) {
   let my_custom_style = new google.maps.StyledMapType(
     myCustomStyle.myCustomStyle as google.maps.MapTypeStyle[],
     {
-      name: "Katerina's style"
+      name: "CodeMeKathy's style"
     }
-  );
+  )
 
   /**
    * Let's look at the Styled Map.
@@ -50,15 +50,15 @@ export function FunWithMaps(map: google.maps.Map) {
    * and add it to the options.
    */
 
-  map.setCenter(london);
-  map.mapTypes.set("dark_map", darkmap);
-  map.mapTypes.set("my_custom_style", my_custom_style);
-  map.setMapTypeId("dark_map");
+  map.setCenter(london)
+  map.mapTypes.set('dark_map', darkmap)
+  map.mapTypes.set('my_custom_style', my_custom_style)
+  map.setMapTypeId('dark_map')
   map.setOptions({
     mapTypeControlOptions: {
-      mapTypeIds: ["roadmap", "terrain", "dark_map", "my_custom_style"]
+      mapTypeIds: ['roadmap', 'terrain', 'dark_map', 'my_custom_style']
     }
-  });
+  })
 
   // Added the controls to the top left
   const controls: HTMLElement = document.getElementById('controls')
@@ -75,7 +75,7 @@ export function FunWithMaps(map: google.maps.Map) {
   const katlink: HTMLElement = document.getElementById('katlink')
 
   // Add the places search to the top center
-  const place_search: HTMLElement = document.getElementById('place-search')
+  const place_search: HTMLElement = document.getElementById('place_search')
 
   // Take a look at the documentation
   // https://developers.google.com/maps/documentation/javascript/controls#ControlPositioning
@@ -261,7 +261,6 @@ function loadHeatmapData() {
     })
 }
 function loadGeoJson(map: google.maps.Map) {
-  // /**
   //  * Find the function that loads a GeoJson file in
   //  * the documentation, and load the file from this path
   //  *
@@ -269,15 +268,14 @@ function loadGeoJson(map: google.maps.Map) {
   //  *
   //  * "assets/data/lonely.geojson"
   //  */
-  // /**
   //  * Fix this code so that whenever we mouseover one of the
   //  * elements, the value is displayed on our page.
   //  *
   //  * https://developers.google.com/maps/documentation/javascript/datalayer#change_appearance_dynamically
   //  */
-  // map.data.setStyle((feature: any) => {
+  // * map.data.setStyle((feature: any) => {
   //   // let lon =
-  //   /**
+  // **
   //    * Use the documentation to receive the
   //    * Prevalence value of each feature.
   //    * https://developers.google.com/maps/documentation/javascript/datalayer#declarative_style_rules
@@ -291,15 +289,15 @@ function loadGeoJson(map: google.maps.Map) {
   //   //   fillColor: color,
   //   //   strokeWeight: 1
   //   // };
-  // });
-  // infoWindow = new google.maps.InfoWindow();
-  // /**
+   // // });
+   // // infoWindow = new google.maps.InfoWindow();
+   // // /**
   //  * Let's create an info window which will display the prevalence information
   //  * when a shape/feature is clicked.
   //  */
-  // map.data.addListener("click", e => {
-  //   /**
+   //// map.data.addListener("click", e => {
+   ////   /**
   //    * Info window here
   //    */
-  // });
+   //// });
 }
