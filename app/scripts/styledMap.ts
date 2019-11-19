@@ -1,4 +1,5 @@
 export const styledMap = [
+  // Dark Map Styling
   { elementType: 'geometry', stylers: [{ color: '#9a9a9a' }] },
   { elementType: 'labels.text.fill', stylers: [{ color: '#111111' }] },
   { elementType: 'labels.text.stroke', stylers: [{ visibility: 'off' }] },
