@@ -111,7 +111,7 @@ function loadAllMarkers(map: google.maps.Map): void {
 
       /**
        * These data contain latitude and longitude information
-       * about electricity masts.
+       * about mobile phone masts.
        * If you look at the data, you will see that
        * the latitude is at position 18, and the longitude is at position 17.
        *
@@ -133,14 +133,20 @@ function loadAllMarkers(map: google.maps.Map): void {
        */
 
       masts.map((x: string[]) => {
-        let marker = new google.maps.Marker()
+        let marker = new google.maps.Marker({
+          position: new google.maps.LatLng(
+            parseFloat(x[18]),
+            parseFloat(x[17])
+          ),
+          icon: antenna
+        });
         /**
          * Marker contents here
          */
 
         /**
          * Now, let's create an info window.
-         * The data at position 14 of each row tells us the address of the masts.
+         * The data at position 14 (x[14]) of each row tells us the address of the masts.
          * When a user clicks on the marker, we want an info window to pop up
          * displaying only the address of the mast.
          *
@@ -150,9 +156,12 @@ function loadAllMarkers(map: google.maps.Map): void {
           /**
            * Info window here
            */
-        })
-        markers.push(marker)
-      })
+          infoWindow.setPosition(e.latLng);
+          infoWindow.setContent(`<p>${x[14]}</p>`);
+          infoWindow.open(map, marker);
+        });
+        markers.push(marker);
+      });
     })
     .catch(error => {
       console.log(error, 'Error loading asset')
@@ -177,6 +186,7 @@ export function changeType() {
   dark_theme = !dark_theme
 }
 export function toggleMasts(): void {
+  console.log("Toggled");
   if (!mastsVisible) {
     markers.map(marker => {
       marker.setMap(this_map)
@@ -212,6 +222,7 @@ export function toggleHeatmap(): void {
 export function changeHeatmapRadius(heatmap_radius: number) {
   heatmap.set('radius', heatmap_radius)
 }
+
 export function changeCluster(clust_num: number): void {
   clustersVisible = true
   if (markerClusterer) {
@@ -251,53 +262,63 @@ function loadHeatmapData() {
       })
       heatmap = new google.maps.visualization.HeatmapLayer({
         data: heatmapData
-      })
-      heatmap.set('gradient', customGradient)
-      heatmap.set('radius', 40)
-      heatmap.set('opacity', 1)
+      });
+      heatmap.set("gradient", customGradient);
+      heatmap.set("radius", 40);
+      heatmap.set("opacity", 0.6);
     })
     .catch(error => {
       console.log(error)
     })
 }
 function loadGeoJson(map: google.maps.Map) {
-  //  * Find the function that loads a GeoJson file in
-  //  * the documentation, and load the file from this path
-  //  *
-  //  * https://developers.google.com/maps/documentation/javascript/datalayer#load_geojson
-  //  *
-  //  * "assets/data/lonely.geojson"
-  //  */
-  //  * Fix this code so that whenever we mouseover one of the
-  //  * elements, the value is displayed on our page.
-  //  *
-  //  * https://developers.google.com/maps/documentation/javascript/datalayer#change_appearance_dynamically
-  //  */
-  // * map.data.setStyle((feature: any) => {
-  //   // let lon =
-  // **
-  //    * Use the documentation to receive the
-  //    * Prevalence value of each feature.
-  //    * https://developers.google.com/maps/documentation/javascript/datalayer#declarative_style_rules
-  //    *
-  //    *
-  //    * If you do not understand what the function mapNumber does, read it and ask me!
-  //    */
-  //   // let value = 255 - Math.round(mapNumber(lon, 0, 5, 0, 255));
-  //   // let color = "rgb(" + value + "," + value + "," + 0 + ")";
-  //   // return {
-  //   //   fillColor: color,
-  //   //   strokeWeight: 1
-  //   // };
-   // // });
-   // // infoWindow = new google.maps.InfoWindow();
-   // // /**
-  //  * Let's create an info window which will display the prevalence information
-  //  * when a shape/feature is clicked.
-  //  */
-   //// map.data.addListener("click", e => {
-   ////   /**
-  //    * Info window here
-  //    */
-   //// });
+  /**
+   * Find the function that loads a GeoJson file in
+   * the documentation, and load the file from this path
+   *
+   * https://developers.google.com/maps/documentation/javascript/datalayer#load_geojson
+   *
+   * "assets/data/lonely.geojson"
+   */
+  map.data.loadGeoJson("assets/data/lonely.geojson");
+  /**
+   * Fix this code so that whenever we mouseover one of the
+   * elements, the value is displayed on our page.
+   *
+   * https://developers.google.com/maps/documentation/javascript/datalayer#change_appearance_dynamically
+   */
+  map.data.setStyle((feature: google.maps.Data.Feature) => {
+    let lon = feature.getProperty("PREVALENCE");
+    /**
+     * Use the documentation to receive the
+     * Prevalence value of each feature.
+     * https://developers.google.com/maps/documentation/javascript/datalayer#declarative_style_rules
+     *
+     *
+     * If you do not undestand what the function mapNumber does, read it and ask me!
+     */
+    let value = 255 - Math.round(mapNumber(lon, 0, 5, 0, 255));
+    let color = "rgb(" + value + "," + value + "," + 0 + ")";
+    return {
+      fillColor: color,
+      strokeWeight: 1
+    };
+  });
+  infoWindow = new google.maps.InfoWindow();
+  /**
+   * Let's create an info window which will display the prevalence information
+   * when a shape/feature is clicked.
+   *
+   * We want that infowindow to say
+   * The prevalence on loneliness is -
+   */
+  map.data.addListener("click", e => {
+    /**
+     * Info window here
+     */
+    infoWindow.setPosition(e.latLng);
+    infoWindow.setContent(`<p>The prevalence of loneliness is: 
+    ${e.feature.getProperty("PREVALENCE")}</p>`);
+    infoWindow.open(map);
+  });
 }
