@@ -1,32 +1,43 @@
 /// <reference types="@types/markerclustererplus" />
 
-import { loadMapScript } from "./mapscript";
+import { loadMapScript } from './mapscript'
 // import { RegisterSW } from "./sw-reg";
-import * as clickListeners from "./clickListeners";
-import { FunWithMaps } from "./map";
-import {} from "google-maps";
+import * as clickListeners from './clickListeners'
+import { FunWithMaps } from './map'
+import {} from 'google-maps'
 
 // RegisterSW();
-clickListeners.loadAllDrawingButtons();
-clickListeners.listenersForControlButtons();
+clickListeners.loadAllDrawingButtons()
+clickListeners.listenersForControlButtons()
 
-let map: google.maps.Map;
+let map: google.maps.Map
 
-if (window["google"] && window["google"]["maps"]) {
-  initMap();
+if (window['google'] && window['google']['maps']) {
+  initMap()
 } else {
-  loadMapScript("geometry,drawing,visualization,places", (event: Event) => {
-    initMap();
-  });
+  loadMapScript('geometry,drawing,visualization,places', (event: Event) => {
+    initMap()
+  })
 }
 
 function initMap() {
-  map = new google.maps.Map(document.getElementById("map"), {
+  map = new google.maps.Map(document.getElementById('map'), {
     /**
      * Add your map options here
      *
      * https://developers-dot-devsite-v2-prod.appspot.com/maps/documentation/javascript/reference/map#MapOptions
      */
-  });
-  FunWithMaps(map);
+    zoom: 11,
+    scrollwheel: true,
+    panControl: false,
+    mapTypeControl: false,
+    zoomControl: true,
+    streetViewControl: false,
+    scaleControl: true,
+    zoomControlOptions: {
+      style: google.maps.ZoomControlStyle.LARGE,
+      position: google.maps.ControlPosition.RIGHT_BOTTOM
+    }
+  })
+  FunWithMaps(map)
 }
